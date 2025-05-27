@@ -63,6 +63,21 @@
   <canvas id="clock" width="300" height="300"></canvas>
   <div id="time-text"></div>
   <div id="birthday-message">🎉 生日快乐！万事胜意！🎂</div>
+  <button id="jump-button" style="
+    display: none;
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #e91e63;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;">
+    🎂 点击跳转 🎉
+  </button>
+
+
 
   <script>
     const canvas = document.getElementById("clock");
@@ -71,18 +86,25 @@
     ctx.translate(radius, radius);
     setInterval(drawClock, 1000);
 
+    document.getElementById("jump-button").addEventListener("click", () => {
+      window.location.href = "https://sherryuser.github.io/cake-blow/";
+    });
+
+
     function drawClock() {
-      const now = new Date();
+      const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Shanghai" }));
       drawFace(ctx, radius);
       drawNumbers(ctx, radius);
       drawTime(ctx, radius, now);
       updateText(now);
 
-      if (now.getHours() === 22 && now.getMinutes() === 29 && now.getSeconds() === 0) {
+      if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+        // document.getElementById("birthday-message").style.display = "block";
+        // setTimeout(() => {
+        //   window.location.href = "https://sherryuser.github.io/cake-blow/";
+        // }, 5000);
         document.getElementById("birthday-message").style.display = "block";
-        setTimeout(() => {
-          window.location.href = "https://sherryuser.github.io/cake-blow/";
-        }, 5000);
+        document.getElementById("jump-button").style.display = "inline-block";
       }
     }
 
@@ -152,12 +174,19 @@
     }
 
     function updateText(now) {
-      const text = new Date().toLocaleTimeString("zh-CN", {
-        hour12: false,
-        timeZone: "Asia/Shanghai"
-      });
-      document.getElementById("time-text").textContent = `北京时间：${text}`;
+        const dateStr = now.toLocaleDateString("zh-CN", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            timeZone: "Asia/Shanghai"
+        });
+        const timeStr = now.toLocaleTimeString("zh-CN", {
+            hour12: false,
+            timeZone: "Asia/Shanghai"
+        });
+        document.getElementById("time-text").textContent = `北京时间：${dateStr} ${timeStr}`;
     }
+
   </script>
 </body>
 </html>
