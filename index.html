@@ -78,7 +78,7 @@
       drawTime(ctx, radius, now);
       updateText(now);
 
-      if (now.getHours() === 22 && now.getMinutes() === 22 && now.getSeconds() === 0) {
+      if (now.getHours() === 22 && now.getMinutes() === 29 && now.getSeconds() === 0) {
         document.getElementById("birthday-message").style.display = "block";
         setTimeout(() => {
           window.location.href = "https://sherryuser.github.io/cake-blow/";
@@ -152,8 +152,11 @@
     }
 
     function updateText(now) {
-      const text = now.toLocaleTimeString();
-      document.getElementById("time-text").textContent = text;
+      const text = new Date().toLocaleTimeString("zh-CN", {
+        hour12: false,
+        timeZone: "Asia/Shanghai"
+      });
+      document.getElementById("time-text").textContent = `北京时间：${text}`;
     }
   </script>
 </body>
