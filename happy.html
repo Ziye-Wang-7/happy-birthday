@@ -2,62 +2,59 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>生日钟表</title>
+  <title>实时钟表</title>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('bg.jpg') no-repeat center center fixed;
-      background-size: cover;
+      height: 100vh;
+      background: url('bg.jpg') no-repeat center center/cover;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      backdrop-filter: blur(2px);
     }
 
     canvas {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.25); /* 半透明白色 */
       border-radius: 50%;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    canvas:hover {
+      transform: scale(1.03);
     }
 
     #time-text {
-      margin-top: 20px;
-      font-size: 24px;
-      color: #333;
+      margin-top: 25px;
+      font-size: 28px;
       font-weight: bold;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
     }
 
     #birthday-message {
       display: none;
-      font-size: 42px;
+      font-size: 40px;
       font-weight: bold;
       color: #ff4081;
       margin-top: 30px;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
       animation: fadeIn 2s ease-in-out infinite alternate;
-      text-align: center;
-      text-shadow: 2px 2px 4px white;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0.3; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1.05); }
-    }
-
-    @media (max-width: 600px) {
-      canvas {
-        width: 220px;
-        height: 220px;
+      from {
+        opacity: 0.4;
+        transform: scale(0.95);
       }
-      #time-text {
-        font-size: 18px;
-      }
-      #birthday-message {
-        font-size: 28px;
+      to {
+        opacity: 1;
+        transform: scale(1.05);
       }
     }
   </style>
@@ -81,8 +78,7 @@
       drawTime(ctx, radius, now);
       updateText(now);
 
-      // 改这里设置触发时间
-      if (now.getHours() === 22 && now.getMinutes() === 7 && now.getSeconds() === 0) {
+      if (now.getHours() === 21 && now.getMinutes() === 51 && now.getSeconds() === 0) {
         document.getElementById("birthday-message").style.display = "block";
         setTimeout(() => {
           window.location.href = "https://sherryuser.github.io/cake-blow/";
@@ -93,15 +89,15 @@
     function drawFace(ctx, radius) {
       ctx.beginPath();
       ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
       ctx.fill();
 
       const grad = ctx.createRadialGradient(0, 0, radius * 0.95, 0, 0, radius * 1.05);
       grad.addColorStop(0, '#333');
-      grad.addColorStop(0.5, 'white');
+      grad.addColorStop(0.5, 'rgba(255,255,255,0.6)');
       grad.addColorStop(1, '#333');
       ctx.strokeStyle = grad;
-      ctx.lineWidth = radius * 0.05;
+      ctx.lineWidth = radius * 0.1;
       ctx.stroke();
 
       ctx.beginPath();
@@ -111,7 +107,7 @@
     }
 
     function drawNumbers(ctx, radius) {
-      ctx.font = radius * 0.15 + "px arial";
+      ctx.font = radius * 0.15 + "px Arial";
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
       for (let num = 1; num <= 12; num++) {
@@ -131,7 +127,9 @@
       const minute = now.getMinutes();
       const second = now.getSeconds();
 
-      let hourPos = (hour * Math.PI / 6) + (minute * Math.PI / (6 * 60)) + (second * Math.PI / (360 * 60));
+      let hourPos = (hour * Math.PI / 6) +
+                    (minute * Math.PI / (6 * 60)) +
+                    (second * Math.PI / (360 * 60));
       drawHand(ctx, hourPos, radius * 0.5, radius * 0.07);
 
       let minutePos = (minute * Math.PI / 30) + (second * Math.PI / (30 * 60));
